@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
+import {connect} from 'react-redux';
 import {CSSTransition} from 'react-transition-group';
+import {actionCreators}  from './store';
 import {HeaderWrapper,
         Logo,
         Nav,
@@ -9,64 +11,59 @@ import {HeaderWrapper,
         Addition,
         Button} from './style.js';
 
-class Header extends Component {
 
-    constructor(props){
-        super(props);
-        this.state = {
-            focused : false
-        };
-        this.handleInputFocus = this.handleInputFocus.bind(this);
-        this.handleInputBlur = this.handleInputBlur.bind(this);
-    }
+const Header = (props) => {
+    return (
+        <HeaderWrapper>
+            <Logo />
+            <Nav>
+                <NavItem className='left active'>Main Page</NavItem>
+                <NavItem className='left'>Download App</NavItem>
+                <NavItem className='right'>Login</NavItem>
+                <NavItem className='right'>
+                <span className="iconfont">&#xe636;</span>
+                </NavItem>
+                <SearchWrapper>
+                    <CSSTransition
+                    in={props.focused}
+                    timeout={200}
+                    classNames='slide'
+                    >
+                    <NavSearch className = {props.focused ? 'focused' : ''}
+                            onFocus={props.handleInputFocus}
+                            onBlur={props.handleInputBlur}>
+                    </NavSearch>
+                    </CSSTransition>
+                <span className = {props.focused ? 'focused iconfont' : 'iconfont'}>&#xe633;</span>
+                </SearchWrapper>
+            </Nav>
+            <Addition>
+                
+                <Button className='post'>
+                <span className="iconfont">&#xe6b3;</span>
+                Post</Button>
+                <Button className='reg'>Register</Button> 
+            </Addition>    
+        </HeaderWrapper>
+    )
+}
 
-    handleInputFocus(){
-        this.setState({
-            focused : true
-        })
-    }
-
-    handleInputBlur(){
-        this.setState({
-            focused : false
-        })
-    }
-
-    render(){
-        return (
-            <HeaderWrapper>
-                <Logo />
-                <Nav>
-                    <NavItem className='left active'>Main Page</NavItem>
-                    <NavItem className='left'>Download App</NavItem>
-                    <NavItem className='right'>Login</NavItem>
-                    <NavItem className='right'>
-                    <span className="iconfont">&#xe636;</span>
-                    </NavItem>
-                    <SearchWrapper>
-                        <CSSTransition
-                        in={this.state.focused}
-                        timeout={200}
-                        classNames='slide'
-                        >
-                        <NavSearch className = {this.state.focused ? 'focused' : ''}
-                                onFocus={this.handleInputFocus}
-                                onBlur={this.handleInputBlur}></NavSearch>
-                        </CSSTransition>
-                    <span className = {this.state.focused ? 'focused iconfont' : 'iconfont'}>&#xe633;</span>
-                    
-                    </SearchWrapper>
-                </Nav>
-                <Addition>
-                    
-                    <Button className='post'>
-                    <span className="iconfont">&#xe6b3;</span>
-                    Post</Button>
-                    <Button className='reg'>Register</Button> 
-                </Addition>    
-            </HeaderWrapper>
-        )
+const mapStateToProps = (state) => {
+    return {
+        //focused : state.get('header').get('focused')
+        focused : state.getIn(['header','focused'])
     }
 }
 
-export default Header;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        handleInputFocus(){
+            dispatch(actionCreators.searchFocus());
+        },
+        handleInputBlur(){
+            dispatch(actionCreators.searchBlur());
+        }
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Header) ;
