@@ -8,8 +8,39 @@ import {HeaderWrapper,
         SearchWrapper,
         NavItem,
         NavSearch,
+        SearchInfo,
         Addition,
-        Button} from './style.js';
+        Button,
+        SearchInfoTitle,
+        SearchInfoSwitch,
+        SearchInfoItem,
+        SearchInfoList} from './style.js';
+
+
+const getListArea = (show) => {
+    if(show){
+        return (
+            <SearchInfo>
+            <SearchInfoTitle>
+                Hot Search
+                <SearchInfoSwitch>
+                    Change
+                </SearchInfoSwitch>
+            </SearchInfoTitle>
+            <SearchInfoList>
+                <SearchInfoItem>karl</SearchInfoItem>
+                <SearchInfoItem>karl</SearchInfoItem>
+                <SearchInfoItem>karl</SearchInfoItem>
+                <SearchInfoItem>karl</SearchInfoItem>
+                <SearchInfoItem>karl</SearchInfoItem>
+                <SearchInfoItem>karl</SearchInfoItem>
+            </SearchInfoList>
+            </SearchInfo>
+        )
+    }else {
+        return null;
+    }
+}
 
 
 const Header = (props) => {
@@ -35,6 +66,7 @@ const Header = (props) => {
                     </NavSearch>
                     </CSSTransition>
                 <span className = {props.focused ? 'focused iconfont' : 'iconfont'}>&#xe633;</span>
+                {getListArea(props.focused)}
                 </SearchWrapper>
             </Nav>
             <Addition>
@@ -47,6 +79,7 @@ const Header = (props) => {
         </HeaderWrapper>
     )
 }
+
 
 const mapStateToProps = (state) => {
     return {
