@@ -19,7 +19,17 @@ import {HeaderWrapper,
 class Header extends Component{
 
     getListArea(){
-        if(this.props.focused){
+        const {focused, list ,page} = this.props;
+        const newList = list.toJS();
+        const pageList = [];
+
+        for(let i = (page-1) * 4 ; i < page * 4 ; i++){
+            pageList.push(
+                <SearchInfoItem key={newList[i]}>{newList[i]}</SearchInfoItem>
+            )
+        }
+
+        if(focused){
             return (
                 <SearchInfo>
                 <SearchInfoTitle>
@@ -29,11 +39,7 @@ class Header extends Component{
                     </SearchInfoSwitch>
                 </SearchInfoTitle>
                 <SearchInfoList>
-                {
-                    this.props.list.map((item) => {
-                        return <SearchInfoItem key={item}>{item}</SearchInfoItem>
-                    })
-                }
+                    {pageList}
                 </SearchInfoList>
                 </SearchInfo>
             )
@@ -43,6 +49,7 @@ class Header extends Component{
     }
 
     render(){
+        const {focused, handleInputFocus,handleInputBlur } = this.props;
         return (
             <HeaderWrapper>
             <Logo />
@@ -55,16 +62,16 @@ class Header extends Component{
                 </NavItem>
                 <SearchWrapper>
                     <CSSTransition
-                    in={this.props.focused}
+                    in={focused}
                     timeout={200}
                     classNames='slide'
                     >
-                    <NavSearch className = {this.props.focused ? 'focused' : ''}
-                            onFocus={this.props.handleInputFocus}
-                            onBlur={this.props.handleInputBlur}>
+                    <NavSearch className = {focused ? 'focused' : ''}
+                            onFocus={handleInputFocus}
+                            onBlur={handleInputBlur}>
                     </NavSearch>
                     </CSSTransition>
-                <span className = {this.props.focused ? 'focused iconfont' : 'iconfont'}>&#xe633;</span>
+                <span className = {focused ? 'focused iconfont' : 'iconfont'}>&#xe633;</span>
                 {this.getListArea()}
                 </SearchWrapper>
             </Nav>
@@ -87,7 +94,8 @@ const mapStateToProps = (state) => {
     return {
         //focused : state.get('header').get('focused')
         focused : state.getIn(['header','focused']),
-        list : state.getIn(['header','list'])
+        list : state.getIn(['header','list']),
+        page: state.getIn(['header','page'])
     }
 }
 
