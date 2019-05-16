@@ -17,6 +17,19 @@ export const searchBlur = () => ({
     type  : actionTypes.SEARCH_BLUR
 });
 
+export const onMouseEnter = () => ({
+    type : actionTypes.MOUSE_ENTER
+});
+
+export const onMouseLeave = () => ({
+    type: actionTypes.MOUSE_LEAVE
+});
+
+export const changePage = (page) => ({
+    type: actionTypes.CHANGE_PAGE,
+    page
+})
+
 export const getList = () => {
     return (dispatch) => {
         Axios.get('/api/headerList.json').then((res) => {
