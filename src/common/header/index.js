@@ -37,7 +37,7 @@ class Header extends Component{
                 <SearchInfoTitle>
                     Hot Search
                     <SearchInfoSwitch onClick={() => handlePageChange(page,totalPage)}>
-                        Change
+                        <span className="iconfont spin">&#xe606;</span>Change
                     </SearchInfoSwitch>
                 </SearchInfoTitle>
                 <SearchInfoList>
@@ -73,7 +73,7 @@ class Header extends Component{
                             onBlur={handleInputBlur}>
                     </NavSearch>
                     </CSSTransition>
-                <span className = {focused ? 'focused iconfont' : 'iconfont'}>&#xe633;</span>
+                <span className = {focused ? 'focused iconfont zoom' : 'iconfont zoom'}>&#xe633;</span>
                 {this.getListArea()}
                 </SearchWrapper>
             </Nav>
