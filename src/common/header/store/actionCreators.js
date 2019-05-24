@@ -1,7 +1,7 @@
 import * as actionTypes from './constants';
 import {fromJS} from 'immutable';
 import Axios from 'axios';
-import { from } from 'rxjs';
+// import { from } from 'rxjs';
 
 const changeList = (data) => ({
     type : actionTypes.CHANGE_LIST,

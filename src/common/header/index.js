@@ -36,8 +36,8 @@ class Header extends Component{
                 <SearchInfo onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                 <SearchInfoTitle>
                     Hot Search
-                    <SearchInfoSwitch onClick={() => handlePageChange(page,totalPage)}>
-                        <span className="iconfont spin">&#xe606;</span>Change
+                    <SearchInfoSwitch onClick={() => handlePageChange(page,totalPage,this.spinIcon)}>
+                        <span ref={(icon) => {this.spinIcon = icon}} className="iconfont spin">&#xe606;</span>Change
                     </SearchInfoSwitch>
                 </SearchInfoTitle>
                 <SearchInfoList>
@@ -51,7 +51,7 @@ class Header extends Component{
     }
 
     render(){
-        const {focused, handleInputFocus,handleInputBlur } = this.props;
+        const {focused, handleInputFocus,handleInputBlur,list } = this.props;
         return (
             <HeaderWrapper>
             <Logo />
@@ -69,7 +69,7 @@ class Header extends Component{
                     classNames='slide'
                     >
                     <NavSearch className = {focused ? 'focused' : ''}
-                            onFocus={handleInputFocus}
+                            onFocus={() => handleInputFocus(list)}
                             onBlur={handleInputBlur}>
                     </NavSearch>
                     </CSSTransition>
@@ -105,8 +105,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleInputFocus(){
-            dispatch(actionCreators.getList());
+        handleInputFocus(list){
+            (list.size === 0) && dispatch(actionCreators.getList());
             dispatch(actionCreators.searchFocus());
         },
         handleInputBlur(){
@@ -119,7 +119,14 @@ const mapDispatchToProps = (dispatch) => {
         handleMouseLeave(){
             dispatch(actionCreators.onMouseLeave());
         },
-        handlePageChange(page,totalPage){
+        handlePageChange(page,totalPage,spin){
+            let originAngle = spin.style.transform.replace(/[^0-9]/ig,"");
+            if(originAngle){
+                originAngle = parseInt(originAngle,10);
+            }else{
+                originAngle = 0;
+            }
+            spin.style.transform = 'rotate('+parseInt(180 + originAngle,10) +'deg)';
             if(page<totalPage){
                 dispatch(actionCreators.changePage(page+1));
             }else{
